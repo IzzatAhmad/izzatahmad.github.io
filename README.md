@@ -1,70 +1,40 @@
-<!-- ══════════════════════════════════════════════ -->
-<!--              IZZAT AHMAD — GitHub Profile      -->
-<!-- ══════════════════════════════════════════════ -->
-
 <!-- Typing Header -->
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=22&pause=1000&color=0055FF&center=true&vCenter=true&width=500&lines=Hi+there!+I'm+Izzat+Ahmad+%F0%9F%91%8B;Computer+Science+Student;Java+%7C+JSP+%7C+Web+Development;Building+things+one+commit+at+a+time." alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=22&pause=1000&color=0055FF&center=true&vCenter=true&width=500&lines=hey%2C+I'm+Izzat+%F0%9F%91%8B;CS+student+by+day%2C+debugger+by+night;always+building+something." alt="Typing SVG" />
 </p>
 
 <br/>
 
 ---
 
-## 👤 About Me
+I'm a CS student from Malaysia who genuinely enjoys building things — not just to finish assignments, but because shipping something that actually works is a good feeling. Right now I'm deep into my final year project, **RailTrack**, a self-hosted platform for managing FYPs with Docker, role-based workflows, and GitHub integration.
 
-```java
-public class IzzatAhmad {
+I write mostly Java (JSP/Servlet, the old-school kind), pick up whatever's needed for the job, and have a soft spot for clean back-end logic over flashy front-end tricks — though I'll do both when I have to.
 
-    String name     = "Izzat Ahmad";
-    String role     = "Computer Science Student";
-    String location = "Malaysia";
-
-    String[] currentlyBuilding = { "RailTrack — FYP Management Platform" };
-    String[] learning          = { "Docker", "Spring Boot", "System Design" };
-    String[] interests         = { "Back-End Dev", "DevOps", "Hackathons" };
-
-    String contact() {
-        return "linkedin.com/in/izzatahmad00";
-    }
-}
-```
+When I'm not coding, I'm probably in a hackathon or figuring out why a container won't start.
 
 ---
 
-## 🛠️ Tech Stack
+## what I work with
 
-### Languages
 <p>
   <img src="https://img.shields.io/badge/Java-%23ED8B00.svg?style=flat-square&logo=openjdk&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JSP%20%2F%20Servlet-%23ED8B00.svg?style=flat-square&logo=openjdk&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-%236DB33F.svg?style=flat-square&logo=springboot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MySQL-%234479A1.svg?style=flat-square&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker-%232496ED.svg?style=flat-square&logo=docker&logoColor=white"/>
   <img src="https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=flat-square&logo=javascript&logoColor=black"/>
   <img src="https://img.shields.io/badge/Python-%233776AB.svg?style=flat-square&logo=python&logoColor=white"/>
   <img src="https://img.shields.io/badge/PHP-%23777BB4.svg?style=flat-square&logo=php&logoColor=white"/>
   <img src="https://img.shields.io/badge/HTML%20%26%20CSS-%23E34F26.svg?style=flat-square&logo=html5&logoColor=white"/>
 </p>
 
-### Frameworks & Runtime
-<p>
-  <img src="https://img.shields.io/badge/JSP%20%2F%20Servlet-%23ED8B00.svg?style=flat-square&logo=openjdk&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Spring%20Boot-%236DB33F.svg?style=flat-square&logo=springboot&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Bootstrap-%237952B3.svg?style=flat-square&logo=bootstrap&logoColor=white"/>
-</p>
-
-### Databases & Tools
-<p>
-  <img src="https://img.shields.io/badge/MySQL-%234479A1.svg?style=flat-square&logo=mysql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Docker-%232496ED.svg?style=flat-square&logo=docker&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Tomcat-%23F8DC75.svg?style=flat-square&logo=apachetomcat&logoColor=black"/>
-  <img src="https://img.shields.io/badge/Git-%23F05032.svg?style=flat-square&logo=git&logoColor=white"/>
-  <img src="https://img.shields.io/badge/GitHub-%23181717.svg?style=flat-square&logo=github&logoColor=white"/>
-</p>
-
 ---
 
-## 📊 GitHub Stats
+## stats
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=IzzatAhmad&show_icons=true&theme=default&hide_border=true&title_color=0055FF&icon_color=0055FF&text_color=111111&bg_color=f7f7f4" height="160"/>
+  <img src="https://github-readme-stats.vercel.app/api?username=IzzatAhmad&show_icons=true&hide_border=true&title_color=0055FF&icon_color=0055FF&text_color=111111&bg_color=f7f7f4" height="160"/>
   &nbsp;
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=IzzatAhmad&layout=compact&hide_border=true&title_color=0055FF&text_color=111111&bg_color=f7f7f4" height="160"/>
 </p>
@@ -75,25 +45,24 @@ public class IzzatAhmad {
 
 ---
 
-## 🕹️ Pac-Man Contribution Graph
+## pac-man ate my commits
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/IzzatAhmad/IzzatAhmad/output/pacman.svg" alt="Pac-Man contribution graph" />
 </p>
 
-> **⚙️ Setup:** The animation above requires a GitHub Action to generate `pacman.svg` daily.
-> Create `.github/workflows/pacman.yml` in this repo with the content below, then **enable Actions** in your repo settings.
-
 <details>
-<summary><strong>📄 .github/workflows/pacman.yml</strong></summary>
+<summary>⚙️ how this works (setup)</summary>
+
+Create `.github/workflows/pacman.yml` in this repo, paste the workflow below, then go to **Actions → Enable Actions** and run it once manually. After that it auto-updates daily.
 
 ```yaml
 name: Generate Pac-Man
 
 on:
   schedule:
-    - cron: "0 0 * * *"   # runs daily at midnight UTC
-  workflow_dispatch:        # allows manual trigger
+    - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -119,11 +88,9 @@ jobs:
 
 </details>
 
-> After the Action runs once, the SVG will appear at the URL above automatically. You can also trigger it manually from the **Actions** tab.
-
 ---
 
-## 🔗 Contact
+## find me
 
 <p>
   <a href="https://github.com/IzzatAhmad">
@@ -140,5 +107,5 @@ jobs:
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=13&pause=2000&color=0055FF&center=true&vCenter=true&width=400&lines=Thanks+for+visiting+%2FIzzatAhmad%2F+%F0%9F%94%B5" alt="footer" />
+  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=13&pause=2000&color=0055FF&center=true&vCenter=true&width=400&lines=thanks+for+stopping+by+%F0%9F%94%B5" alt="footer" />
 </p>
