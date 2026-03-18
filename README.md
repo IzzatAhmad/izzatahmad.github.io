@@ -47,16 +47,6 @@
 
 ---
 
-### 📊 GitHub Stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=IzzatAhmad&show_icons=true&hide_border=true&title_color=0055FF&icon_color=0055FF&text_color=111111" alt="GitHub Stats" />
-  &nbsp;
-  <img src="https://streak-stats.demolab.com?user=IzzatAhmad&hide_border=true&ring=0055FF&fire=0055FF&currStreakLabel=0055FF" alt="GitHub Streak" />
-</p>
-
----
-
 ### 🌐 Let's Connect
 
 - 💼 LinkedIn: [linkedin.com/in/izzatahmad00](https://www.linkedin.com/in/izzatahmad00/)
