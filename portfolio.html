@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>izzatahmad.github.io</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:     #f7f7f4;
+      --card:   #ffffff;
+      --fg:     #111111;
+      --muted:  #999999;
+      --border: #e2e2dd;
+      --accent: #0055ff;
+      --mono:   'Share Tech Mono', monospace;
+      --sans:   'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ── CIRCUIT CANVAS ── */
+    #circuit-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: rgba(247,247,244,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+    }
+    .logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      color: var(--fg);
+      text-decoration: none;
+      position: relative;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+    }
+    .logo::before, .logo::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      color: inherit;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .logo::before {
+      left: 2px;
+      text-shadow: -1px 0 rgba(255,40,80,0.45);
+      animation: glitch-a 1.3s linear infinite alternate-reverse;
+      clip-path: inset(100% 0 0 0);
+    }
+    .logo::after {
+      left: -2px;
+      text-shadow: -1px 0 rgba(0,85,255,0.4);
+      animation: glitch-b 0.9s linear infinite alternate-reverse;
+      clip-path: inset(100% 0 0 0);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nav-btn {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0.9rem; right: 0.9rem;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+    }
+    .nav-btn:hover { color: var(--fg); }
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn.active::after { transform: scaleX(1); }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 4px 9px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--fg);
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; min-height: 100vh; padding-top: 56px; position: relative; z-index: 1; }
+    .page.active { display: block; }
+
+    /* ── SHARED ── */
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      color: var(--accent);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--sans);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* cards */
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .info-card:hover { border-color: #c8d6ff; box-shadow: 0 4px 20px rgba(0,85,255,0.07); }
+    .info-card:hover::before { transform: scaleX(1); }
+
+    /* social buttons */
+    .btn-social {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: #555;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.55rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .btn-social:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 4px 16px rgba(0,85,255,0.12);
+      transform: translateY(-2px);
+    }
+    .btn-social i { font-size: 0.95rem; }
+
+    /* reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ═══════════ PAGE 1 — HOME ═══════════ */
+    .home-hero {
+      min-height: calc(100vh - 56px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      text-align: center;
+    }
+
+    /* ── PROFILE PHOTO ── */
+    .profile-photo-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s ease forwards;
+    }
+    .profile-photo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      border: 2.5px solid var(--border);
+      box-shadow: 0 0 0 4px rgba(0,85,255,0.08), 0 8px 32px rgba(0,0,0,0.10);
+      display: block;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .profile-photo:hover {
+      box-shadow: 0 0 0 5px rgba(0,85,255,0.18), 0 8px 32px rgba(0,85,255,0.13);
+      transform: scale(1.04);
+    }
+    /* Glowing ring accent */
+    .profile-photo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,85,255,0.20);
+      pointer-events: none;
+      animation: ringPulse 2.8s ease-in-out infinite;
+    }
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.04); }
+    }
+
+    /* Fallback placeholder shown when no src / broken image */
+    .profile-photo-placeholder {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8ecff 0%, #f0f0ed 100%);
+      border: 2.5px solid var(--border);
+      box-shadow: 0 0 0 4px rgba(0,85,255,0.08), 0 8px 32px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      color: #b0b8cc;
+      cursor: default;
+    }
+
+    .typing-wrap {
+      font-family: var(--sans);
+      font-size: clamp(1.8rem, 5vw, 3.6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--fg);
+      line-height: 1.25;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s ease forwards;
+    }
+    .typing-wrap .prefix { font-weight: 400; color: var(--muted); }
+    .typing-wrap .typed-text { color: var(--accent); }
+    .typing-wrap .cursor-blink {
+      display: inline-block;
+      color: var(--accent);
+      animation: blink 0.7s step-start infinite;
+      margin-left: 2px;
+    }
+    .social-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.6s ease forwards;
+    }
+    .home-intro {
+      max-width: 540px;
+      margin: 2rem auto 0;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.8s ease forwards;
+    }
+    .home-intro p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+    .contact-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+    .chip {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      color: #666;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.35rem 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .chip:hover { border-color: var(--accent); color: var(--accent); }
+    .chip i { font-size: 0.8rem; }
+
+    /* ═══════════ PAGE 2 — RESUME ═══════════ */
+    .resume-page { padding: 72px 0 80px; }
+    .rs-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-left: 2px solid var(--accent);
+      padding-left: 9px;
+      margin-bottom: 1rem;
+    }
+    .item-date {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .item-title { font-weight: 700; font-size: 0.93rem; color: var(--fg); margin-bottom: 1px; }
+    .item-org { font-size: 0.78rem; color: var(--accent); font-weight: 500; margin-bottom: 6px; }
+    .item-body { font-size: 0.83rem; color: #666; line-height: 1.7; margin: 0; padding-left: 1rem; }
+    .item-body li { margin-bottom: 2px; }
+    .cgpa {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      background: rgba(0,85,255,0.07);
+      color: var(--accent);
+      border-radius: 3px;
+      padding: 2px 8px;
+      margin-top: 4px;
+    }
+    .stack-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: #aaa;
+      background: #f3f3f0;
+      border-radius: 2px;
+      padding: 2px 6px;
+      margin-right: 3px;
+      display: inline-block;
+    }
+    .dl-btn {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 3px;
+      padding: 0.5rem 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dl-btn:hover { background: var(--accent); color: #fff; }
+
+    /* ═══════════ PAGE 3 — CAREER GOALS ═══════════ */
+    .goals-page { padding: 72px 0 80px; }
+    .goal-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .goal-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+    .goal-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      font-size: 0.86rem;
+      color: #555;
+      line-height: 1.85;
+    }
+    .goal-list li::before { content: '→ '; font-family: var(--mono); color: var(--accent); font-size: 0.72rem; }
+    .interest-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.82rem;
+      color: #555;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      margin: 3px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .interest-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ═══════════ PAGE 4 — SKILLS ═══════════ */
+    .skills-page { padding: 72px 0 80px; }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.3rem 1.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .sg-title {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sg-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .skill-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: #666;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 10px;
+      margin: 2px;
+      background: var(--bg);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+    .skill-tag.hi { border-color: #c8d6ff; background: rgba(0,85,255,0.04); color: var(--accent); }
+
+    .ach-item {
+      display: flex;
+      gap: 0.9rem;
+      padding: 0.85rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.2s;
+    }
+    .ach-item:hover { border-color: #c8d6ff; }
+    .ach-year { font-family: var(--mono); font-size: 0.62rem; color: var(--accent); min-width: 36px; padding-top: 2px; }
+    .ach-text { font-size: 0.84rem; color: #555; line-height: 1.5; }
+    .ach-text strong { color: var(--fg); }
+
+    .lang-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+    .lang-name { font-weight: 600; font-size: 0.88rem; }
+    .lang-badge {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: rgba(0,85,255,0.07);
+      border-radius: 3px;
+      padding: 2px 8px;
+    }
+
+    /* ═══════════ PAGE 5 — EOP ═══════════ */
+    .eop-page { padding: 72px 0 80px; }
+    .eop-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      gap: 0;
+      overflow-x: auto;
+    }
+    .eop-tab {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.6rem 1.1rem;
+      cursor: pointer;
+      white-space: nowrap;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .eop-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .eop-tab:hover { color: var(--fg); }
+
+    .eop-panel { display: none; }
+    .eop-panel.active { display: block; }
+
+    .week-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.3rem 1.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .week-hdr {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+    }
+    .week-cols { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+    .week-col { flex: 1; min-width: 140px; }
+    .wc-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .wc-list { margin: 0; padding-left: 1rem; font-size: 0.82rem; color: #666; line-height: 1.75; }
+
+    .video-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 0.85rem;
+    }
+    .vid-thumb {
+      background: #f0f0ed;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: #ccc;
+      border-bottom: 1px solid var(--border);
+    }
+    .vid-body { padding: 1rem 1.2rem; }
+    .vid-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
+    .vid-desc { font-size: 0.8rem; color: #888; }
+
+    .eop-proj {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.3rem 1.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .ep-title { font-weight: 700; font-size: 0.93rem; margin-bottom: 2px; }
+    .ep-meta { font-family: var(--mono); font-size: 0.62rem; color: var(--accent); margin-bottom: 0.6rem; }
+    .ep-body { font-size: 0.83rem; color: #666; line-height: 1.75; }
+
+    .refl-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .refl-label {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+    }
+    .refl-text { font-size: 0.85rem; color: #555; line-height: 1.85; }
+
+    /* ── FOOTER ── */
+    .footer-section {
+      border-top: 1px solid var(--border);
+      padding: 48px 0 32px;
+      text-align: center;
+      background: var(--card);
+      position: relative;
+      z-index: 1;
+    }
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: #bbb;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .footer-logo::before, .footer-logo::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      color: inherit;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .footer-logo::before {
+      left: 1px;
+      text-shadow: -1px 0 rgba(255,40,80,0.4);
+      animation: glitch-a 1.3s linear infinite alternate-reverse;
+      clip-path: inset(100% 0 0 0);
+    }
+    .footer-logo::after {
+      left: -1px;
+      text-shadow: -1px 0 rgba(0,85,255,0.35);
+      animation: glitch-b 0.9s linear infinite alternate-reverse;
+      clip-path: inset(100% 0 0 0);
+    }
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: #ccc;
+      letter-spacing: 0.06em;
+    }
+    .footer-copy a { color: #aaa; text-decoration: none; }
+    .footer-copy a:hover { color: var(--accent); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+    @keyframes glitch-a {
+      0%,50%  { clip-path: inset(100% 0 0 0); }
+      55%  { clip-path: inset(20% 0 30% 0); }
+      60%  { clip-path: inset(19% 0 76% 0); }
+      65%  { clip-path: inset(30% 0 20% 0); }
+      70%  { clip-path: inset(20% 0 60% 0); }
+      75%  { clip-path: inset(0 0 70% 0); }
+      80%  { clip-path: inset(80% 0 0 0); }
+      85%  { clip-path: inset(7% 0 20% 0); }
+      90%  { clip-path: inset(20% 0 60% 0); }
+      95%  { clip-path: inset(30% 0 20% 0); }
+      100% { clip-path: inset(35% 0 50% 0); }
+    }
+    @keyframes glitch-b {
+      0%,50%  { clip-path: inset(100% 0 0 0); }
+      55%  { clip-path: inset(7% 0 20% 0); }
+      60%  { clip-path: inset(50% 0 60% 0); }
+      65%  { clip-path: inset(35% 0 50% 0); }
+      70%  { clip-path: inset(80% 0 0 0); }
+      75%  { clip-path: inset(5% 0 20% 0); }
+      80%  { clip-path: inset(19% 0 60% 0); }
+      85%  { clip-path: inset(40% 0 30% 0); }
+      90%  { clip-path: inset(19% 0 76% 0); }
+      95%  { clip-path: inset(20% 0 60% 0); }
+      100% { clip-path: inset(30% 0 20% 0); }
+    }
+
+    @media (max-width: 767px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 56px; left: 0; right: 0;
+        background: rgba(247,247,244,0.97);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem;
+        z-index: 499;
+      }
+      .nav-btn::after { display: none; }
+      .home-hero { padding: 40px 24px; }
+      .profile-photo, .profile-photo-placeholder { width: 90px; height: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="circuit-bg"></canvas>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <span class="logo" data-text="/IzzatAhmad/" onclick="showPage('home')">/IzzatAhmad/</span>
+  <div class="nav-links" id="navLinks">
+    <button class="nav-btn active" onclick="showPage('home')">Home</button>
+    <button class="nav-btn"        onclick="showPage('resume')">Resume</button>
+    <button class="nav-btn"        onclick="showPage('goals')">Career Goals</button>
+    <button class="nav-btn"        onclick="showPage('skills')">Skills</button>
+    <button class="nav-btn"        onclick="showPage('eop')">EOP</button>
+  </div>
+  <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <i class="bi bi-list"></i>
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PAGE 1 — HOME / ABOUT ME
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="home-hero">
+    <div class="hero-inner">
+
+      <!-- ── PROFILE PHOTO ── -->
+      <!-- TO USE YOUR PHOTO: replace "your-photo.jpg" with your actual image filename.
+           The image should be in the same folder as this HTML file.
+           Recommended: square crop, minimum 220×220px. -->
+      <div class="profile-photo-wrap">
+        <img
+          class="profile-photo"
+          src="https://lh3.googleusercontent.com/pw/AP1GczNCwY3ycJjflIWa9V1b97y0KVfRokuuC0iNEzJsSMDlhd-3vf0Ok3a14NfsGbaTOKx5NfmUwlS8qVvfE9QudgpJWxpNEgDa7OEGesjCECKLXqKR7HezuaEJ2C4GO3_zeEzFaU18yHhIts6Eaz1y2RMFgA=w231-h231-s-no-gm?authuser=0"
+          alt="Muhammad Izzat Amri"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Shown only if image fails to load -->
+        <div class="profile-photo-placeholder" style="display:none;">
+          <i class="bi bi-person-fill"></i>
+        </div>
+      </div>
+
+      <div class="typing-wrap">
+        <span class="prefix">I am </span><span class="typed-text" id="typed"></span><span class="cursor-blink">|</span>
+      </div>
+      <div class="social-row">
+        <a href="https://github.com/IzzatAhmad" target="_blank" class="btn-social"><i class="bi bi-github"></i> GitHub</a>
+        <a href="https://stackoverflow.com/users/15065735/izzat-ahmad" target="_blank" class="btn-social"><i class="bi bi-stack-overflow"></i> Stack Overflow</a>
+        <a href="https://www.linkedin.com/in/izzatahmad00/" target="_blank" class="btn-social"><i class="bi bi-linkedin"></i> LinkedIn</a>
+      </div>
+      <div class="home-intro">
+        <p>
+          Computer Science (Maritime Informatics) student at Universiti Malaysia Terengganu, with experience across three full-stack development roles. I enjoy building systems that actually solve problems — clean architecture, reliable code, and on-time delivery.
+        </p>
+        <p style="margin-top:0.5rem;">
+          Welcome to my personal website.
+        </p>
+        <div class="contact-chips">
+          <a href="tel:+601128483302" class="chip"><i class="bi bi-telephone"></i> +60 1128483302</a>
+          <a href="mailto:izzatahmad00@gmail.com" class="chip"><i class="bi bi-envelope"></i> izzatahmad00@gmail.com</a>
+          <span class="chip"><i class="bi bi-geo-alt"></i> Lunas, Kedah</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 2 — RESUME / PORTFOLIO
+══════════════════════════════════════ -->
+<div class="page" id="page-resume">
+  <div class="container resume-page">
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-5 reveal">
+      <div>
+        <span class="section-label">// resume</span>
+        <h2 class="section-title">Experience &amp; Education</h2>
+        <p style="color:var(--muted); font-size:0.85rem; margin:0;">Full academic background and professional experience.</p>
+      </div>
+      <a href="mailto:izzatahmad00@gmail.com" class="dl-btn"><i class="bi bi-download"></i> Request CV (PDF)</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="rs-label reveal">Experience</div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">Nov 2022 – Present</div>
+          <div class="item-title">Full-Stack Developer (Freelance)</div>
+          <div class="item-org">Burning Centipede Tech Solution · Remote, Malaysia</div>
+          <ul class="item-body">
+            <li>Developing and maintaining full-stack web applications for clients, focusing on performance and scalability.</li>
+            <li>Designing backend systems and RESTful APIs using Java, PHP, and MySQL.</li>
+            <li>Implementing responsive front-end interfaces using HTML, CSS, JavaScript, and Bootstrap.</li>
+            <li>Managing deployments and ensuring reliable delivery across multiple client projects.</li>
+          </ul>
+        </div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">Jan 2022 – Oct 2022</div>
+          <div class="item-title">Web Developer (Full-Stack)</div>
+          <div class="item-org">BizLink Technology (S.E.A.) Sdn. Bhd. · Perai, Penang</div>
+          <ul class="item-body">
+            <li>Developed 2 robust, reusable platform components enhancing company frameworks and services.</li>
+            <li>Managed 100% of change requests using established coding standards, testing, and documentation.</li>
+            <li>Designed and developed features based on user stories, requirements, and design specifications.</li>
+          </ul>
+        </div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">Aug 2021 – Oct 2021</div>
+          <div class="item-title">Software Developer (Full-Stack) · Remote</div>
+          <div class="item-org">Technology Innovation Resources (TIR) Sdn Bhd · Puchong, Selangor</div>
+          <ul class="item-body">
+            <li>Contributed to the in-house UI library by creating reusable components.</li>
+            <li>Worked with 3 programmers under a senior software engineer's supervision.</li>
+            <li>Gained practical Java and Bootstrap experience through peer coaching.</li>
+          </ul>
+        </div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">Mar 2021 – Jul 2021</div>
+          <div class="item-title">Web Developer (Full-Stack) · Internship</div>
+          <div class="item-org">ASFAH BioEnergy Sdn. Bhd. · Simpang Ampat, Pinang</div>
+          <ul class="item-body">
+            <li>Developed a dynamic website ensuring high traffic, page views, and strong UX.</li>
+            <li>Oversaw full SDLC for 3 projects with 100% on-time delivery.</li>
+            <li>Participated in client stand-up reviews 3× per month.</li>
+          </ul>
+        </div>
+         <div class="rs-label reveal mt-3">Projects</div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-title">RailTrack — FYP Management Platform</div>
+          <div class="item-org">Final Year Project · UMT · 2024 – Present</div>
+          <p style="font-size:0.83rem; color:#666; line-height:1.7; margin:0.4rem 0 0.6rem;">Self-hosted platform for FYP deployment with Docker container lifecycle management, milestone tracking, GitHub/GitLab integration, and three-role access control.</p>
+          <span class="stack-tag">Java EE</span><span class="stack-tag">JSP</span><span class="stack-tag">MySQL</span><span class="stack-tag">Docker</span><span class="stack-tag">Tomcat</span><span class="stack-tag">Bootstrap 5</span>
+        </div>
+        <div class="info-card reveal reveal-d1">
+          <div class="item-title">Asterisk* — Augmented Reality (AR) for Network Devices</div>
+          <div class="item-org">Diploma Final Year Project · PSP · 2020</div>
+          <p style="font-size:0.83rem; color:#666; line-height:1.7; margin:0.4rem 0 0.6rem;">Revolutionised networking visualisation using AR — an interactive experience that enhances real-world environments with computer-generated information. Built on computer vision–based recognition algorithms to overlay sound, video, graphics, and sensor data onto physical network devices via camera, adding digital information layers to the real world.</p>
+          <span class="stack-tag">Augmented Reality</span><span class="stack-tag">Computer Vision</span><span class="stack-tag">Unity</span><span class="stack-tag">Vuforia</span>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="rs-label reveal">Education</div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">2023 – 2026</div>
+          <div class="item-title">Bachelor of Computer Science (Maritime Informatics) (Hons)</div>
+          <div class="item-org">Universiti Malaysia Terengganu (UMT)</div>
+          <span class="cgpa">CGPA 3.77 / 4.00</span>
+        </div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-date">2018 – 2021</div>
+          <div class="item-title">Diploma in Information Technology (Digital Technology)</div>
+          <div class="item-org">Polytechnic Seberang Perai (PSP)</div>
+          <span class="cgpa">CGPA 3.70 / 4.00</span>
+        </div>
+        <div class="info-card mb-4 reveal reveal-d1">
+          <div class="item-date">2013 – 2017</div>
+          <div class="item-title">Sijil Pelajaran Malaysia (SPM)</div>
+          <div class="item-org">SMK Tunku Panglima Besar</div>
+        </div>
+
+        <div class="rs-label reveal">Reference</div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-title">En. Fakhrul Adli Mohd Zaki</div>
+          <div class="item-org">Lecturer · FYP Supervisor · UMT</div>
+          <div class="item-date mt-1">+60 19-476 1709</div>
+        </div>
+        <div class="info-card mb-3 reveal reveal-d1">
+          <div class="item-title">Dr. Rosmayati Binti Mohemad</div>
+          <div class="item-org">Associate Professor · UMT</div>
+          <div class="item-date mt-1">+60 19-987 0602</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 3 — CAREER GOALS
+══════════════════════════════════════ -->
+<div class="page" id="page-goals">
+  <div class="container goals-page">
+    <div class="reveal mb-5">
+      <span class="section-label">// career goals</span>
+      <h2 class="section-title">Direction &amp; Ambition</h2>
+      <p style="color:var(--muted); font-size:0.85rem; max-width:500px; margin:0;">Where I'm headed — short-term targets, long-term vision, and the fields I want to grow into.</p>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6 reveal">
+        <div class="info-card h-100">
+          <div class="goal-icon">🎯</div>
+          <div class="goal-label">Short-Term Goals</div>
+          <ul class="goal-list">
+            <li>Graduate with first-class honours (target CGPA 3.8+)</li>
+            <li>Complete and deploy RailTrack as a production-ready platform</li>
+            <li>Land a full-stack software engineering role in Malaysia</li>
+            <li>Gain experience in system design and cloud deployment</li>
+            <li>Improve proficiency in Spring Boot and containerisation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 reveal reveal-d1">
+        <div class="info-card h-100">
+          <div class="goal-icon">🚀</div>
+          <div class="goal-label">Long-Term Goals</div>
+          <ul class="goal-list">
+            <li>Become a senior software engineer or solutions architect</li>
+            <li>Contribute to open-source projects in the Java ecosystem</li>
+            <li>Build or contribute to a product solving Malaysian industry problems</li>
+            <li>Mentor junior developers and give back to the community</li>
+            <li>Explore maritime informatics — my specialisation field</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="info-card reveal">
+      <p style="font-family:var(--mono); font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:0.75rem;">Areas of Interest</p>
+      <div>
+        <span class="interest-pill"><i class="bi bi-code-slash"></i> Full-Stack Development</span>
+        <span class="interest-pill"><i class="bi bi-boxes"></i> Software Architecture</span>
+        <span class="interest-pill"><i class="bi bi-hdd-stack"></i> Containerisation &amp; DevOps</span>
+        <span class="interest-pill"><i class="bi bi-database"></i> Database Engineering</span>
+        <span class="interest-pill"><i class="bi bi-water"></i> Maritime Informatics</span>
+        <span class="interest-pill"><i class="bi bi-diagram-3"></i> System Design</span>
+        <span class="interest-pill"><i class="bi bi-shield-check"></i> Secure Software Engineering</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 4 — SKILLS & ACHIEVEMENTS
+══════════════════════════════════════ -->
+<div class="page" id="page-skills">
+  <div class="container skills-page">
+    <div class="reveal mb-5">
+      <span class="section-label">// skills &amp; achievements</span>
+      <h2 class="section-title">What I Know &amp; What I've Won</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="skill-group reveal">
+          <div class="sg-title">Technical Skills — Programming</div>
+          <span class="skill-tag hi">Java</span><span class="skill-tag hi">HTML5</span><span class="skill-tag hi">CSS3</span><span class="skill-tag hi">JavaScript</span><span class="skill-tag hi">Bootstrap 5</span><span class="skill-tag">PHP</span><span class="skill-tag">Google Script</span><span class="skill-tag">C++</span><span class="skill-tag">C#</span>
+        </div>
+        <div class="skill-group reveal reveal-d1">
+          <div class="sg-title">Frameworks &amp; Libraries</div>
+          <span class="skill-tag hi">Spring Boot</span><span class="skill-tag hi">JSP / JSTL</span><span class="skill-tag hi">Bootstrap 5</span><span class="skill-tag">Maven</span><span class="skill-tag">Apache Tomcat</span><span class="skill-tag">jBCrypt</span><span class="skill-tag">JDBC</span>
+        </div>
+        <div class="skill-group reveal reveal-d2">
+          <div class="sg-title">Data &amp; Infrastructure</div>
+          <span class="skill-tag hi">SQL</span><span class="skill-tag hi">MySQL</span><span class="skill-tag hi">Docker</span><span class="skill-tag">Git / GitHub</span><span class="skill-tag">GitLab</span><span class="skill-tag">Linux</span><span class="skill-tag">REST APIs</span>
+        </div>
+        <div class="skill-group reveal">
+          <div class="sg-title">Soft Skills</div>
+          <span class="skill-tag">Communication</span><span class="skill-tag">Teamwork</span><span class="skill-tag">Problem Solving</span><span class="skill-tag">Time Management</span><span class="skill-tag">Documentation</span>
+        </div>
+        <div class="skill-group reveal">
+          <div class="sg-title">Spoken &amp; Writing Language</div>
+          <div class="lang-row"><span class="lang-name">English</span><span class="lang-badge">Professional</span></div>
+          <div class="lang-row" style="margin-bottom:0;"><span class="lang-name">Bahasa Melayu</span><span class="lang-badge">Native</span></div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="rs-label reveal">Achievements &amp; Awards</div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2025</div><div class="ach-text"><strong>UMP Hackathon X Smart City</strong><br/>Competitor — Gamified LMS · UMT</div></div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2022</div><div class="ach-text"><strong>Polytechnic Director's Award</strong><br/>Polytechnic Seberang Perai (PSP)</div></div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2022</div><div class="ach-text"><strong>Academic &amp; Co-curricular Excellence Award</strong><br/>Polytechnic Seberang Perai (PSP)</div></div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2020</div><div class="ach-text"><strong>FYP Competition — 1st Runner Up</strong><br/>Augmented Reality Application · PSP</div></div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2020</div><div class="ach-text"><strong>EduInnovation 2020 — 2nd Runner Up</strong><br/>International Competition (UKM) · AR Application</div></div>
+        <div class="ach-item reveal reveal-d1"><div class="ach-year">2019</div><div class="ach-text"><strong>Polyskills — PSMZA</strong><br/>Competitor — Web Design and Development</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 5 — EOP
+══════════════════════════════════════ -->
+<div class="page" id="page-eop">
+  <div class="container eop-page">
+    <div class="reveal mb-4">
+      <span class="section-label">// english for occupational purposes</span>
+      <h2 class="section-title">EOP Portfolio</h2>
+      <p style="color:var(--muted); font-size:0.85rem; margin:0;">Weekly reflections, project documentation, and learning journey.</p>
+    </div>
+    <div class="eop-tabs">
+      <button class="eop-tab active" onclick="showEopTab(this,'recaps')">Weekly Recaps</button>
+      <button class="eop-tab"        onclick="showEopTab(this,'videos')">Videos</button>
+      <button class="eop-tab"        onclick="showEopTab(this,'projects')">Projects</button>
+      <button class="eop-tab"        onclick="showEopTab(this,'reflections')">Reflections</button>
+    </div>
+    <div class="eop-panel active" id="eop-recaps">
+      <div class="week-card reveal">
+        <div class="week-hdr">Week 1</div>
+        <div class="week-cols">
+          <div class="week-col"><div class="wc-label">What I Learned</div><ul class="wc-list"><li>EOP course objectives &amp; structure</li><li>Importance of professional communication</li></ul></div>
+          <div class="week-col"><div class="wc-label">What I Worked On</div><ul class="wc-list"><li>Planning personal website content</li><li>Drafting structure based on 5-page template</li></ul></div>
+          <div class="week-col"><div class="wc-label">Challenges Faced</div><ul class="wc-list"><li>Deciding what content to include</li><li>Balancing coursework with FYP deadlines</li></ul></div>
+        </div>
+      </div>
+      <div class="week-card reveal reveal-d1">
+        <div class="week-hdr">Week 2</div>
+        <div class="week-cols">
+          <div class="week-col"><div class="wc-label">What I Learned</div><ul class="wc-list"><li>Resume writing best practices</li><li>Tailoring CV to specific job descriptions</li></ul></div>
+          <div class="week-col"><div class="wc-label">What I Worked On</div><ul class="wc-list"><li>Drafted and refined all resume sections</li><li>Analysed 4 real Malaysian tech job postings</li></ul></div>
+          <div class="week-col"><div class="wc-label">Challenges Faced</div><ul class="wc-list"><li>Articulating experience concisely</li><li>Quantifying achievements with numbers</li></ul></div>
+        </div>
+      </div>
+      <div class="week-card reveal reveal-d1">
+        <div class="week-hdr">Week 3</div>
+        <div class="week-cols">
+          <div class="week-col"><div class="wc-label">What I Learned</div><ul class="wc-list"><li>Job analysis structure and methodology</li><li>Matching personal skills to job requirements</li></ul></div>
+          <div class="week-col"><div class="wc-label">What I Worked On</div><ul class="wc-list"><li>Completed 4 job analyses (Intel, Pentamaster, Toray, Eonmetall)</li></ul></div>
+          <div class="week-col"><div class="wc-label">Challenges Faced</div><ul class="wc-list"><li>Understanding industry-specific requirements</li><li>Writing professional justification sections</li></ul></div>
+        </div>
+      </div>
+      <p style="font-family:var(--mono); font-size:0.62rem; color:var(--muted); letter-spacing:0.1em; margin-top:0.5rem;">// add more weeks as the course progresses</p>
+    </div>
+    <div class="eop-panel" id="eop-videos">
+      <div class="row g-4">
+        <div class="col-md-6 reveal">
+          <div class="video-card">
+            <div class="vid-thumb"><i class="bi bi-play-circle"></i></div>
+            <div class="vid-body"><div class="vid-title">Self-Introduction Video</div><div class="vid-desc">A short professional introduction covering background, skills, and career goals — produced for EOP coursework.</div></div>
+          </div>
+        </div>
+        <div class="col-md-6 reveal reveal-d1">
+          <div class="video-card">
+            <div class="vid-thumb"><i class="bi bi-play-circle"></i></div>
+            <div class="vid-body"><div class="vid-title">RailTrack Project Demo</div><div class="vid-desc">Walkthrough of the RailTrack platform — Docker container management, milestone tracking, and the student dashboard.</div></div>
+          </div>
+        </div>
+      </div>
+      <p style="font-family:var(--mono); font-size:0.62rem; color:var(--muted); letter-spacing:0.1em; margin-top:1.2rem;">// embed video links or upload recordings here</p>
+    </div>
+    <div class="eop-panel" id="eop-projects">
+      <div class="eop-proj reveal">
+        <div class="ep-title">RailTrack — FYP Deployment Platform</div>
+        <div class="ep-meta">Final Year Project · 2024 – Present</div>
+        <div class="ep-body">
+          <p><strong>Description:</strong> A self-hosted web platform to manage Final Year Projects at university level. Handles container deployment via Docker, GitHub/GitLab submissions, milestone tracking, feedback loops, and three-tier role access.</p>
+          <p><strong>What I Learned:</strong> Docker API integration via ProcessBuilder, Server-Sent Events (SSE) for real-time updates, BCrypt password hashing, and building a complete SDLC for a real-world system.</p>
+          <p style="margin:0;"><strong>Tools Used:</strong> <span class="stack-tag">Java EE</span><span class="stack-tag">JSP</span><span class="stack-tag">MySQL</span><span class="stack-tag">Docker</span><span class="stack-tag">Tomcat</span><span class="stack-tag">Bootstrap 5</span><span class="stack-tag">JDBC</span></p>
+        </div>
+      </div>
+      <div class="eop-proj reveal reveal-d1">
+        <div class="ep-title">Job Analysis Portfolio — EOP Course</div>
+        <div class="ep-meta">EOP Coursework · 2025</div>
+        <div class="ep-body">
+          <p><strong>Description:</strong> Analysed and compared 4 real job postings from Malaysian tech companies — Intel Graduate Talent, Pentamaster Automation Software Engineer, Toray Software Engineer, and Eonmetall Programmer Engineer.</p>
+          <p><strong>What I Learned:</strong> How to extract requirements from job descriptions, identify skills gaps, and write professional justifications for job fit assessments.</p>
+          <p style="margin:0;"><strong>Tools Used:</strong> <span class="stack-tag">MS Word</span><span class="stack-tag">Job Analysis Template</span><span class="stack-tag">Skills Matching</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="eop-panel" id="eop-reflections">
+      <div class="refl-card reveal">
+        <div class="refl-label">What Improved Over Time</div>
+        <p class="refl-text">My ability to communicate professionally in writing has grown significantly. Early drafts of my resume and cover letters were too informal — over the weeks I learned how to write concisely, use action verbs, and quantify achievements. The job analysis exercises also forced me to think critically about how my skills align with industry needs.</p>
+      </div>
+      <div class="refl-card reveal reveal-d1">
+        <div class="refl-label">Lessons Learned</div>
+        <p class="refl-text">One of the biggest lessons from this course is that technical skills alone aren't enough. Being able to articulate what I do, why it matters, and how it benefits an employer is just as important as writing the code. EOP has given me tools to bridge that gap — especially through resume writing, job analyses, and self-introduction exercises.</p>
+      </div>
+      <div class="refl-card reveal reveal-d1">
+        <div class="refl-label">Personal Thoughts</div>
+        <p class="refl-text">Going through this course while finishing my Final Year Project was challenging but valuable. RailTrack taught me how to think about systems at scale; EOP taught me how to present that thinking to the world. Both skills will matter when I step into the industry. I feel more prepared now than I did at the start of the semester.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer-section">
+  <div class="container">
+    <div class="footer-logo" data-text="/IzzatAhmad/">/IzzatAhmad/</div><br/>
+    <div class="footer-copy">
+      coded with <span style="color:#ddd">☕</span> by
+      <a href="https://www.linkedin.com/in/izzatahmad00/" target="_blank">Izzat Ahmad</a>
+      &nbsp;·&nbsp; pure Bootstrap 5 &nbsp;·&nbsp; no frameworks were harmed
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ── TYPING ──
+  const phrases = [
+    'Izzat Ahmad.',
+    'a Computer Science student.',
+    'a full-stack developer.',
+    'a Hackathon Enthusiast.',
+    'building RailTrack.',
+    'open to work.'
+  ];
+  let pIdx = 0, cIdx = 0, deleting = false;
+  const typedEl = document.getElementById('typed');
+  function typeSpeed() {
+    if (!deleting && Math.random() < 0.08) return 180 + Math.random() * 120;
+    const ch = phrases[pIdx][cIdx] || '';
+    if (!deleting && ch === ' ') return 100 + Math.random() * 60;
+    if (!deleting && '.,-'.includes(ch)) return 130 + Math.random() * 70;
+    return deleting ? 45 + Math.random() * 30 : 85 + Math.random() * 55;
+  }
+  function type() {
+    const ph = phrases[pIdx];
+    if (!deleting) {
+      typedEl.textContent = ph.slice(0, ++cIdx);
+      if (cIdx === ph.length) { deleting = true; setTimeout(type, 1800); return; }
+    } else {
+      typedEl.textContent = ph.slice(0, --cIdx);
+      if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % phrases.length; setTimeout(type, 500); return; }
+    }
+    setTimeout(type, typeSpeed());
+  }
+  setTimeout(type, 1000);
+
+  // ── CIRCUIT BACKGROUND ──
+  (function () {
+    const canvas = document.getElementById('circuit-bg');
+    const ctx    = canvas.getContext('2d');
+    const GRID   = 40;
+    const TRACE  = 'rgba(0,85,255,0.07)';
+    const NODE   = 'rgba(0,85,255,0.13)';
+    const PAD    = 'rgba(0,85,255,0.09)';
+    function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function coin(p) { return Math.random() < p; }
+    function draw() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cols = Math.ceil(canvas.width  / GRID) + 1;
+      const rows = Math.ceil(canvas.height / GRID) + 1;
+      const active = new Set();
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++)
+          if (coin(0.28)) active.add(`${c},${r}`);
+      ctx.lineCap = 'square';
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = TRACE;
+      for (let r = 0; r < rows; r++) {
+        let runStart = null;
+        for (let c = 0; c < cols; c++) {
+          if (active.has(`${c},${r}`)) { if (runStart === null) runStart = c; }
+          else {
+            if (runStart !== null && c - runStart > 1) {
+              ctx.beginPath(); ctx.moveTo(runStart * GRID, r * GRID); ctx.lineTo((c - 1) * GRID, r * GRID); ctx.stroke();
+            }
+            runStart = null;
+          }
+        }
+      }
+      for (let c = 0; c < cols; c++) {
+        let runStart = null;
+        for (let r = 0; r < rows; r++) {
+          if (active.has(`${c},${r}`)) { if (runStart === null) runStart = r; }
+          else {
+            if (runStart !== null && r - runStart > 1) {
+              ctx.beginPath(); ctx.moveTo(c * GRID, runStart * GRID); ctx.lineTo(c * GRID, (r - 1) * GRID); ctx.stroke();
+            }
+            runStart = null;
+          }
+        }
+      }
+      for (const key of active) {
+        const [c, r] = key.split(',').map(Number);
+        const x = c * GRID, y = r * GRID;
+        if (coin(0.12)) { ctx.fillStyle = PAD; ctx.fillRect(x - 5, y - 5, 10, 10); }
+        else { ctx.fillStyle = NODE; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); }
+      }
+      for (let i = 0; i < Math.floor(cols * rows * 0.012); i++) {
+        const c = rnd(1, cols - 2), r = rnd(1, rows - 2);
+        if (!active.has(`${c},${r}`)) continue;
+        const w = rnd(1, 2) * GRID, h = GRID * 0.3;
+        ctx.strokeStyle = TRACE; ctx.strokeRect(c * GRID - w / 2, r * GRID - h / 2, w, h);
+      }
+    }
+    draw();
+    window.addEventListener('resize', draw);
+  })();
+
+  // ── PAGE NAVIGATION ──
+  const allPages  = ['home','resume','goals','skills','eop'];
+  const allNavBtn = document.querySelectorAll('.nav-btn');
+  function showPage(id) {
+    allPages.forEach(p => document.getElementById('page-'+p).classList.remove('active'));
+    allNavBtn.forEach(b => b.classList.remove('active'));
+    document.getElementById('page-'+id).classList.add('active');
+    allNavBtn.forEach(b => { if (b.getAttribute('onclick') === `showPage('${id}')`) b.classList.add('active'); });
+    document.getElementById('navLinks').classList.remove('open');
+    window.scrollTo(0, 0);
+    setTimeout(triggerReveal, 60);
+  }
+
+  // ── EOP SUB-TABS ──
+  function showEopTab(btn, id) {
+    document.querySelectorAll('.eop-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.eop-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('eop-'+id).classList.add('active');
+    btn.classList.add('active');
+    setTimeout(triggerReveal, 60);
+  }
+
+  // ── SCROLL REVEAL ──
+  function triggerReveal() {
+    const els = document.querySelectorAll('.page.active .reveal:not(.visible)');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    els.forEach(el => obs.observe(el));
+  }
+  triggerReveal();
+  window.addEventListener('scroll', triggerReveal, { passive: true });
+</script>
+</body>
+</html>
